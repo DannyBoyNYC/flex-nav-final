@@ -1120,3 +1120,5 @@ And finally, use an [event](https://developer.mozilla.org/en-US/docs/Web/API/Doc
 // initializePage()
 document.addEventListener("DOMContentLoaded", initializePage);
 ```
+
+## END
