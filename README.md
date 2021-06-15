@@ -2,6 +2,7 @@
 
 - [FlexNav](#flexnav)
   - [Homework](#homework)
+  - [Midterm](#midterm)
   - [Reading](#reading)
   - [The Terminal](#the-terminal)
     - [A Note For Windows Users](#a-note-for-windows-users)
@@ -13,18 +14,34 @@
     - [Aside: Flex Order](#aside-flex-order)
   - [JavaScript Preview & Review - Boulevards de Paris](#javascript-preview--review---boulevards-de-paris)
     - [Arrays](#arrays)
+    - [Aside: Prettier](#aside-prettier)
   - [Event Delegation](#event-delegation)
   - [Working with Objects](#working-with-objects)
-  - [End](#end)
   - [An Array of Objects](#an-array-of-objects)
-  - [Extra Credit - refresh](#extra-credit---refresh)
-  - [Extra Credit - createElement](#extra-credit---createelement)
-    - [Initialize on Load](#initialize-on-load)
-  - [Notes](#notes)
 
 ## Homework
 
 Examine the files in the `other/homework` folder. `index.html` is your starting point and `index-done.html` the goal. Your assignment is to edit `index.html` so it matches the goal.
+
+## Midterm
+
+Copy the `other/homework` folder from the previous section (Flexnav) into a stand alone project.
+
+- `index.html` is your starting point
+- `index-done.html` the goal
+- edit `index.html` so it matches the goal
+- try not to copy directly, use `index-done.html` only when you get stuck
+
+One task you will have to perform is not in the `index-done.html` file. Using the notes in Basilica:
+
+- add an empty div to the page
+- use JavaScript to change the content of the div when the user clicks on the tabs
+
+Make sure to create a local Git repo.
+
+When you are done push your local repo to Github and use Netlify to deploy your assignment.
+
+Send me a link to the Github repo as well as the Netlify site
 
 ## Reading
 
@@ -75,11 +92,13 @@ Use `cd` or the copy and paste method to cd into today's exercise folder.
 
 ## Initialize GIT and Create a Branch
 
-Configure your installation of git:
+[Configure](https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup) your installation of git:
 
 ```sh
 $ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
+$ git config --global init.defaultBranch main
+$ git config --list
 ```
 
 Initialize your repository:
@@ -536,11 +555,25 @@ function makeInactive() {
 }
 ```
 
+<!--
+clone the branch into a new folder
+set up netlify:
+https://www.netlify.com/blog/2016/09/29/a-step-by-step-guide-deploying-on-netlify/
+view the main branch on Netlify
+merge the inclass branch into master
+commit and push
+view the main branch on Netlify
+-->
+
 ### Aside: Prettier
 
-Install the Prettier Code Formatter extension in VS Code.
+[Prettier](https://prettier.io/docs/en/index.html) is a code formatter.
 
-Create `.prettierrc` in the app folder:
+Install the Prettier extension in VS Code.
+
+`npm install -D prettier`
+
+Create `.prettierrc` in the app folder.
 
 ```js
 {
@@ -550,12 +583,23 @@ Create `.prettierrc` in the app folder:
 }
 ```
 
+<!-- ```js
+"scripts": {
+	"format": "prettier --write \"./**/*.{js,html,css}\""
+},
+```
+
+```sh
+$ npm run format
+``` -->
+
 And test.
 
-Note: you can also add prettier preferences in VS Code:
+Note: you can also [add prettier preferences](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) in VS Code:
 
 ```js
 "editor.formatOnSave": true,
+"editor.defaultFormatter": "esbenp.prettier-vscode",
 "[javascript]": {
   "editor.formatOnSave": true
 },
@@ -601,6 +645,8 @@ var contentPara = document.querySelector('.content');
 contentPara.innerHTML = cuisines;
 ```
 
+<!-- textContent -->
+
 Style it using CSS:
 
 ```css
@@ -621,10 +667,26 @@ function makeActive() {
 So let's make the content of the `.content` div depend on the link's href. We will use the string method `includes` as a test for simple equality will fail:
 
 ```js
-function makeActive() {
+function makeActive(event) {
   console.log(event.target.href);
   makeInactive();
   event.target.classList.add("active");
+
+  if (event.target.href.includes("chefs")) {
+    contentPara.innerHTML = chefs;
+  }
+
+  event.preventDefault();
+}
+```
+
+Expand the conditions:
+
+```js
+function makeActive() {
+  makeInactive();
+  event.target.classList.add("active");
+
   if (event.target.href.includes("cuisines")) {
     contentPara.innerHTML = cuisines;
   } else if (event.target.href.includes("chefs")) {
@@ -634,13 +696,16 @@ function makeActive() {
   } else if (event.target.href.includes("delivery")) {
     contentPara.innerHTML = delivery;
   }
+
   event.preventDefault();
 }
 ```
 
+<!-- SWITCH https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/switch -->
+
 In web development parlance this is something akin to what is known as a Single Page Application or "SPA".
 
-The problems with what we've built might be termed _maintaining state_ and _routing_. If you refresh the browser while you are on the Reviews tab it reinitializes the page to show the Cuisines tab.
+The problem with what we've built might be termed _maintaining state_ and _routing_. If you refresh the browser while you are on the Reviews tab. The page reinitializes to show the Cuisines tab and content.
 
 Not only is the refresh broken but the back and forward buttons don't work as expected either.
 
@@ -660,10 +725,11 @@ We are going to use "event delegation."
 Use:
 
 ```js
+// tabs.forEach((tab) => tab.addEventListener("click", makeActive));
 document.addEventListener("click", makeActive);
 ```
 
-Everything works but try clicking on the paragraph.
+Everything works but try clicking on the paragraph and the yellow background.
 
 We will use an if statement and the JavaScript "not" (`!`) operator to ensure that the user has clicked on a link in the navbar before running our code:
 
@@ -688,7 +754,22 @@ function makeActive(event) {
 
 ## Working with Objects
 
-(See `other/OBJECTS.js` using Quokka in VS Code.)
+<!-- (See `other/OBJECTS.js` using Quokka in VS Code.) -->
+
+```js
+let obj = {
+  a: 1,
+  b: 2,
+};
+
+console.log(obj.a);
+
+obj.c = 3;
+
+delete obj.a;
+```
+
+Use `data-object.js` in `index.html`:
 
 ```js
 const data = {
@@ -720,23 +801,27 @@ function makeActive() {
   makeInactive();
   event.target.classList.add("active");
   if (event.target.href.includes("cuisines")) {
-    contentPara.innerHTML = data.cuisines;
+    contentPara.innerHTML = data.cuisines; // NEW
   } else if (event.target.href.includes("chefs")) {
-    contentPara.innerHTML = data.chefs;
+    contentPara.innerHTML = data.chefs; // NEW
   } else if (event.target.href.includes("reviews")) {
-    contentPara.innerHTML = data.reviews;
+    contentPara.innerHTML = data.reviews; // NEW
   } else if (event.target.href.includes("delivery")) {
-    contentPara.innerHTML = data.delivery;
+    contentPara.innerHTML = data.delivery; // NEW
   }
   event.preventDefault();
 }
+...
+contentPara.innerHTML = data.cuisines;
 ```
 
-Our page is pretty fragile. Hitting refresh always displays the cuisines page and the back button doesn't work. Let's fix it by getting the page contents based on the address in the browser's address bar.
+Our page is pretty fragile. Hitting refresh still displays the cuisines page and the back button doesn't work. Let's fix it by getting the page contents based on the address in the browser's address bar.
 
 Remove the hardcoded active class in the HTML and replace it with:
 
-`document.querySelector('nav a').classList.add('active');`
+```js
+document.querySelector("nav a").classList.add("active");
+```
 
 Change the href values to use hashes:
 
@@ -751,12 +836,12 @@ Change the href values to use hashes:
 
 Remove `event.preventDefault()` from the script. We no longer need it.
 
-Now we'll get the string from the URL sing a bit of JavaScript [string manipulation](<(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)>):
+Now we'll get the string from the URL using a bit of JavaScript [string manipulation](<(https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/substring)>):
 
 ```js
 console.log(window.location);
 var type = window.location.hash;
-var type = window.location.hash.substring(1);
+// var type = window.location.hash.substring(1);
 console.log(type);
 ```
 
@@ -770,49 +855,48 @@ function makeActive(event) {
 }
 ```
 
+Note the use of `data[type]` instead of `data.type.
+
+```js
+var funkyObject = {
+  a: "testing",
+  "not a variable": "but you can use it in an object",
+};
+
+console.log(funkyObject.a);
+console.log( funkyObject.not a variable  ) // doesn't work
+console.log(funkyObject["not a variable"]);
+```
+
+```js
+var propertyToCheck = prompt("What do you want to get?");
+console.log(propertyToCheck);
+funkyObject.propertyToCheck; // doesn't work
+funkyObject[propertyToCheck];
+```
+
 You have to click on the tab twice to get the right content although the active / inactive class switching works.
 
 We can set the initial hash with `window.location.hash = 'cuisines'`
 
 See [https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event](https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event)
 
-Rollback to:
+And then use another event listener `hashchange`:
 
 ```js
 var tabs = document.querySelectorAll("nav a");
 var contentPara = document.querySelector(".content");
 
-contentPara.innerHTML = data.cuisines;
-document.querySelector("nav a").classList.add("active");
-
 function makeActive(event) {
-  if (!event.target.matches("a")) return; // NEW
+  if (!event.target.matches("nav a")) return;
   makeInactive();
   event.target.classList.add("active");
+  const type = window.location.hash.substring(1);
+  contentPara.innerHTML = data[type];
 }
 
 function makeInactive() {
   tabs.forEach((tab) => tab.classList.remove("active"));
-}
-
-document.addEventListener("click", makeActive);
-```
-
-```js
-var contentPara = document.querySelector(".content");
-var tabs = document.querySelectorAll("nav a");
-
-function makeActive(event) {
-  if (!event.target.matches("a")) return;
-  makeInactive();
-  event.target.classList.add("active");
-  setContentAccordingToHash();
-}
-
-function makeInactive() {
-  tabs.forEach(function (tab) {
-    tab.classList.remove("active");
-  });
 }
 
 function setContentAccordingToHash() {
@@ -832,111 +916,82 @@ window.addEventListener("hashchange", setContentAccordingToHash);
 initializePage();
 ```
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li><a href="#cuisines">cuisines</a></li>
-        <li><a href="#chefs">chefs</a></li>
-        <li><a href="#reviews">reviews</a></li>
-        <li><a href="#delivery">delivery</a></li>
-      </ul>
-    </nav>
-    <div class="content"></div>
-    <script src="js/data-object.js"></script>
-    <script src="js/scripts.js"></script>
-  </body>
-</html>
-```
+Now that we are using a hash we can look for it when the page loads and then derive a solution for the refresh button:
 
-```css
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1.25rem;
-}
-a {
-  text-decoration: none;
-  color: #333;
-}
-ul {
-  margin: 0;
-  padding: 0;
-}
-nav ul {
-  list-style: none;
-  background-color: #ffcb2d;
-  padding-top: 1rem;
-  display: flex;
-  justify-content: space-around;
-  background-image: linear-gradient(
-    to bottom,
-    #ffcb2d 0%,
-    #ffcb2d 95%,
-    #9b8748 100%
-  );
-}
-
-nav a {
-  padding: 4px 8px;
-  border: 1px solid #9b8748;
-  border-radius: 3px 3px 0 0;
-  background-color: #f9eaa9;
-  opacity: 0.8;
-  background-image: linear-gradient(
-    to bottom,
-    rgb(248, 236, 193) 0%,
-    rgb(245, 237, 213) 6%,
-    rgb(248, 219, 112) 94%,
-    rgb(247, 204, 51) 100%
-  );
-}
-
-nav li {
-  display: flex;
-}
-
-nav a:hover,
-nav .active {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(224, 226, 240, 1) 6%,
-    rgba(254, 254, 254, 1) 53%
-  );
-  border-bottom: none;
-  opacity: 1;
-}
-
-.content {
-  padding: 1rem;
-}
-
-@media (min-width: 460px) {
-  nav ul {
-    padding-left: 1rem;
-    justify-content: flex-start;
+```js
+function initializePage() {
+  if (!window.location.hash) {
+    window.location.hash = "cuisines";
+    document.querySelector('[href="#cuisines"]').classList.add("active");
+  } else {
+    document
+      .querySelector('[href="' + window.location.hash + '"] ')
+      .classList.add("active");
   }
-  nav li {
-    margin-right: 1rem;
-  }
+  setContentAccordingToHash();
 }
 ```
 
-## End
+Note the use of [attribute selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors) and concatenation.
 
-<!-- ## Data Attributes
+We'll replace our concatination with template strings (aka string literals).
+
+```js
+const name = "Yorik";
+const age = 2;
+const oldSchool =
+  "My dog's name is " + name + " and he is " + age * 7 + " years old.";
+
+const newSchool = `My dog's name is ${name} and he is ${age * 7} years old.`;
+console.log("oldschool ", oldschool);
+console.log("newschool ", newschool);
+```
+
+[Template Strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) use back ticks instead of quotes and have access to JS expressions inside placeholders - ${ ... }.
+
+```js
+.querySelector(`[href="${window.location.hash}"]`)
+```
+
+If we want to use the hash change to determine both the active tab and the content being displayed we can dispense with the click event listener. This also makes it easier to reset both the active state and content when the browers forward and back arrows are used:
+
+```js
+var tabs = document.querySelectorAll("nav a");
+contentPara = document.querySelector(".content");
+
+// when the hash changes
+function setActiveTabAccordingToHash(type) {
+  makeAllTabsInactive();
+  var tabToActivate = document.querySelector(`a[href="#${type}"]`);
+  tabToActivate.classList.add("active");
+}
+
+function makeAllTabsInactive() {
+  tabs.forEach((tab) => tab.classList.remove("active"));
+}
+
+// runs on page load and whenever the hash changes
+function setContentAccordingToHash() {
+  var type = window.location.hash.substring(1);
+  contentPara.innerHTML = data[type];
+  setActiveTabAccordingToHash(type);
+}
+
+// only runs once on page load
+function initializePage() {
+  if (!window.location.hash) {
+    window.location.hash = "cuisines";
+    document.querySelector('[href="#cuisines"]').classList.add("active");
+  }
+  setContentAccordingToHash();
+}
+
+window.addEventListener("hashchange", setContentAccordingToHash);
+
+initializePage();
+```
+
+<!-- ## Aside - Data Attributes
 
 Add [data attributes](https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes) to the HTML:
 
@@ -961,21 +1016,18 @@ Use dataset and bracket notation when accessing an object's property via a varia
 
 ```js
 function makeActive() {
-  if (!event.target.matches('nav ul a')) return;
-  makeInactive();
-  event.target.classList.add('active');
+  ...
   let activePage = document.querySelector('.active');
   let storyRef = activePage.dataset.story;
   contentPara.innerHTML = data[storyRef];
-  // event.preventDefault();
 }
 ```
 
-Note that because we are using hashes as the href value for our links we no longer need to prevent the default behavior of the links since hashes always refer to the current page. -->
+## END -->
 
 ## An Array of Objects
 
-This is an extemmely common format for data to be sent from a server for use in a page.
+This is an extremely common format for data to be sent from a server for use in a page.
 
 ```html
 https://api.nytimes.com/svc/topstories/v2/travel.json?api-key=uQG4jhIEHKHKm0qMKGcTHqUgAolr1GM0`;
@@ -983,7 +1035,7 @@ https://pokeapi.co/api/v2/pokemon/
 https://www.reddit.com/r/BudgetAudiophile.json
 ```
 
-It's also very dangerous to accept HTML from a server for use in your page as it opens possibilities for hacking. Accordingly I've removed the HTML tags here.
+Examine `data-array.js`:
 
 ```js
 const data = [
@@ -1016,19 +1068,11 @@ An array is commonly used in conjunction with loops. We will loop through our da
 function setContentAccordingToHash() {
   const type = window.location.hash.substring(1);
   for (var i = 0; i < data.length; i++) {
-    console.log(i, data[i]);
     if (data[i].section === type) {
-      console.log(data[i].story);
       contentPara.innerHTML = data[i].story;
+      setActiveTabAccordingToHash(type);
     }
   }
-}
-
-function initializePage() {
-  console.log(data[0].section);
-  document.querySelector("nav a").classList.add("active");
-  window.location.hash = "cuisines";
-  setContentAccordingToHash();
 }
 ```
 
@@ -1036,259 +1080,43 @@ We could also use the array's `forEach` method instead of a for loop:
 
 ```js
 function setContentAccordingToHash() {
-  const type = window.location.hash.substring(1)
+  const type = window.location.hash.substring(1);
   data.forEach(function (item) {
     if (item.section === type) {
-      contentPara.innerHTML = item.story
+      contentPara.innerHTML = item.story;
+      setActiveTabAccordingToHash(type);
     }
-  })
+  });
+}
 ```
 
-Or a `for ... of` loop:
+I prefer a `for ... of` loop ([documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)):
 
 ```js
 function setContentAccordingToHash() {
   const type = window.location.hash.substring(1);
-
   for (var item of data) {
     if (item.section === type) {
       contentPara.innerHTML = item.story;
+      setActiveTabAccordingToHash(type);
     }
   }
 }
 ```
 
-## Extra Credit - refresh
-
-A solution for the refresh button:
+We can use a template string (string literal) to create HTML that uses both the section and story elements:
 
 ```js
-function initializePage() {
-  if (!window.location.hash) {
-    window.location.hash = "cuisines";
-    document.querySelector('a[href="#cuisines"]').classList.add("active");
-  } else {
-    document
-      .querySelector(`a[href="${window.location.hash}"]`)
-      .classList.add("active");
-  }
-  setContentAccordingToHash();
+if (item.section === type) {
+  // contentPara.innerHTML = item.story
+  contentPara.innerHTML = `<h2>${item.section}</h2> <p>${item.story}</p>`;
+  setActiveTabAccordingToHash(type);
 }
 ```
 
-## Extra Credit - createElement
-
-Finally, let's create a header for the content.
-
-Use the `document.createElement()` method to create an element. You can manipulate an element created with createElement() like you would any other element in the DOM. Add classes, attributes, styles, and more.
-
-At the bottom of makeActive:
-
-`makeHeader(storyRef);`
+And finally, use an [event](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event) to kick start our page:
 
 ```js
-function makeHeader(head) {
-  const myHeader = document.createElement("h3");
-  myHeader.innerText = head;
-  contentPara.prepend(myHeader);
-}
-```
-
-To insert the content we can use:
-
-- before() - insert an element before another one
-- after() - inserts an element in the DOM after another one
-- prepend() -inserts an element at the beginning of a selection
-- append() - inserts an element at the end
-
-To remove an element you can use `remove()`.
-
-Add some CSS to capitalize the new header:
-
-```css
-.content h3 {
-  text-transform: capitalize;
-}
-```
-
-Add the same CSS property to the tab text.
-
-### Initialize on Load
-
-Initialize the header on first load using the `load` event (or the `DOMContentLoaded` event).
-
-`window.addEventListener('load', setUp);`
-
-```js
-function setUp() {
-  document.querySelector("nav a").classList.add("active");
-  contentPara.innerHTML = data[0].story;
-  makeHeader(data[0].section);
-  window.location.hash = "cuisines";
-}
-```
-
-Simulate a click on the first tab:
-
-```js
-function setUp() {
-  document.querySelector("nav a").click();
-}
-```
-
-## Notes
-
-similar. Nice use of callbacks:
-https://itnext.io/build-a-single-page-web-app-javascript-and-the-dom-90c99b08f8a9
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="icon" type="image//png" href="favicon.png" />
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li><a href="#cuisines">cuisines</a></li>
-        <li><a href="#chefs">chefs</a></li>
-        <li><a href="#reviews">reviews</a></li>
-        <li><a href="#delivery">delivery</a></li>
-      </ul>
-    </nav>
-    <div class="content"></div>
-    <script src="js/data-array.js"></script>
-    <script src="js/scripts.js"></script>
-  </body>
-</html>
-```
-
-```css
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Helvetica Neue", Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1.25rem;
-}
-a {
-  text-decoration: none;
-  color: #333;
-}
-ul {
-  margin: 0;
-  padding: 0;
-}
-nav ul {
-  list-style: none;
-  background-color: #ffcb2d;
-  padding-top: 1rem;
-  display: flex;
-  justify-content: space-around;
-  background-image: linear-gradient(
-    to bottom,
-    #ffcb2d 0%,
-    #ffcb2d 95%,
-    #9b8748 100%
-  );
-}
-
-nav a {
-  padding: 4px 8px;
-  border: 1px solid #9b8748;
-  border-radius: 3px 3px 0 0;
-  background-color: #f9eaa9;
-  opacity: 0.8;
-  background-image: linear-gradient(
-    to bottom,
-    rgb(248, 236, 193) 0%,
-    rgb(245, 237, 213) 6%,
-    rgb(248, 219, 112) 94%,
-    rgb(247, 204, 51) 100%
-  );
-}
-
-nav li {
-  display: flex;
-}
-
-nav a:hover,
-nav a[class="active"] {
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(224, 226, 240, 1) 6%,
-    rgba(254, 254, 254, 1) 53%
-  );
-  border-bottom: none;
-  opacity: 1;
-}
-
-.content {
-  padding: 1rem;
-}
-
-@media (min-width: 460px) {
-  nav ul {
-    padding-left: 1rem;
-    justify-content: flex-start;
-  }
-  nav li {
-    margin-right: 1rem;
-  }
-}
-```
-
-```js
-var contentPara = document.querySelector(".content");
-var tabs = document.querySelectorAll("nav a");
-
-function makeActive(event) {
-  if (!event.target.matches("a")) return;
-  makeInactive();
-  event.target.classList.add("active");
-  setContentAccordingToHash();
-}
-
-function makeInactive() {
-  tabs.forEach(function (tab) {
-    tab.classList.remove("active");
-  });
-}
-
-function setContentAccordingToHash() {
-  var type = window.location.hash.substring(1);
-  for (var item of data) {
-    if (item.section === type) {
-      contentPara.innerHTML = item.story;
-    }
-  }
-  setActiveAccordingToHash(type);
-}
-
-function setActiveAccordingToHash(type) {
-  makeInactive();
-  document.querySelector(`a[href="#${type}"]`).classList.add("active");
-}
-
-function initializePage() {
-  if (!window.location.hash) {
-    window.location.hash = "cuisines";
-    document.querySelector('[href="#cuisines"]').classList.add("active");
-  } else {
-    document
-      .querySelector(`[href="${window.location.hash}"]`)
-      .classList.add("active");
-  }
-  setContentAccordingToHash();
-}
-
-document.addEventListener("click", makeActive);
-window.addEventListener("hashchange", setContentAccordingToHash);
-window.addEventListener("load", initializePage);
+// initializePage()
+document.addEventListener("DOMContentLoaded", initializePage);
 ```
