@@ -1,0 +1,15 @@
+{
+  "name": "flexnav-master",
+  "version": "1.0.0",
+  "description": "Testing npm",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync start --port 1234 --server 'app' --files 'app'"
+  },
+  "author": "Daniel Deverell",
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.26.14",
+    "prettier": "^2.3.1"
+  }
+}
