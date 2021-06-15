@@ -1035,7 +1035,7 @@ https://pokeapi.co/api/v2/pokemon/
 https://www.reddit.com/r/BudgetAudiophile.json
 ```
 
-Examine `data-array.js`:
+Examine `data-array.js` and link to it from `index.html:
 
 ```js
 const data = [

@@ -63,6 +63,10 @@ nav li {
   padding: 1rem;
 }
 
+.content h2 {
+  text-transform: capitalize;
+}
+
 @media (min-width: 460px) {
   nav ul {
     padding-left: 1rem;

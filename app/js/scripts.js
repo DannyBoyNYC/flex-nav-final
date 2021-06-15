@@ -1,40 +1,40 @@
 var tabs = document.querySelectorAll('nav a')
 contentPara = document.querySelector('.content')
 
-function makeActive(event) {
-  if (!event.target.matches('a')) return
-  makeInactive()
-  event.target.classList.add('active')
+function setActiveTabAccordingToHash(type) {
+  makeAllTabsInactive()
+  var tabToActivate = document.querySelector(`a[href="#${type}"]`)
+  tabToActivate.classList.add('active')
 }
 
-function makeInactive() {
+function makeAllTabsInactive() {
   tabs.forEach((tab) => tab.classList.remove('active'))
 }
 
+// function setContentAccordingToHash() {
+//   const type = window.location.hash.substring(1)
+//   contentPara.innerHTML = data[type]
+//   setActiveTabAccordingToHash(type)
+// }
+
 function setContentAccordingToHash() {
   const type = window.location.hash.substring(1)
-  contentPara.innerHTML = data[type]
+  for (var item of data) {
+    if (item.section === type) {
+      contentPara.innerHTML = `<h2>${item.section}</h2> <p>${item.story}</p>`
+      setActiveTabAccordingToHash(type)
+    }
+  }
 }
-
-// function initializePage() {
-//   document.querySelector('nav a').classList.add('active')
-//   window.location.hash = 'cuisines'
-//   setContentAccordingToHash()
-// }
 
 function initializePage() {
   if (!window.location.hash) {
     window.location.hash = 'cuisines'
     document.querySelector('[href="#cuisines"]').classList.add('active')
-  } else {
-    document
-      .querySelector(`[href="${window.location.hash}]"`)
-      .classList.add('active')
   }
   setContentAccordingToHash()
 }
 
-document.addEventListener('click', makeActive)
 window.addEventListener('hashchange', setContentAccordingToHash)
 
 initializePage()
